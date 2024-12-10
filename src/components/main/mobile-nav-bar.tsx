@@ -6,7 +6,6 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { routes } from "@/utils/constants";
-import UserButton from "../user-button";
 
 const MobileNavbar = () => {
   const user = { username: "shahrohit", email: "shahrohit2061@gmail.com" };
@@ -65,7 +64,7 @@ const MobileNavbar = () => {
             {user ? (
               <div className="flex justify-center gap-2">
                 <div className="flex items-center gap-2 border p-1 pr-5 rounded-full">
-                  <UserButton />
+                  {/* <UserButton /> */}
                   {user.username}
                 </div>
               </div>

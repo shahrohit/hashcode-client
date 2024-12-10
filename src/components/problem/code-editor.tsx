@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import { useAuth } from "@/hooks/use-auth";
+import useSubmissionStore from "@/store/submission-store";
 import { Editor, Monaco } from "@monaco-editor/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState, useCallback } from "react";
@@ -16,6 +18,7 @@ const CodeEditor = ({
 }: Props) => {
   const { theme } = useTheme();
   const { user } = useAuth();
+  const { setLanguage, setCode } = useSubmissionStore();
 
   const [monacoInstance, setMonacoInstance] = useState<Monaco | null>(null);
 
@@ -45,6 +48,14 @@ const CodeEditor = ({
     setCustomTheme(monaco);
   };
 
+  useEffect(() => {
+    setLanguage(language);
+  }, [language]);
+
+  useEffect(() => {
+    setCode(code);
+  }, [code]);
+
   // Update theme dynamically based on `theme` value
   useEffect(() => {
     if (monacoInstance) {
@@ -72,6 +83,9 @@ const CodeEditor = ({
         },
       }}
       value={code}
+      onChange={(newCode) => {
+        if (newCode) setCode(newCode);
+      }}
     />
   );
 };

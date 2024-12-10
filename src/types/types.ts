@@ -43,3 +43,22 @@ export type Activity = {
     submissions: number;
   };
 };
+
+export type TExecutionStatus =
+  | "Accepted"
+  | "Compiled Error"
+  | "Wrong Answer"
+  | "Error"
+  | "TLE"
+  | "RTE";
+
+export type TExecutionJob = {
+  username: string;
+  problemId: number;
+  input?: string;
+  output?: string;
+  executionOutput: string;
+  status: TExecutionStatus;
+  acceptedCount?: number;
+  timestamp: string;
+};

@@ -4,8 +4,8 @@ import { LOGO_URL } from "@/utils/constants";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { ProblemSheet } from "./problem-sheet";
-import { CloudUpload } from "lucide-react";
 import { HiPlay } from "react-icons/hi2";
+import SubmitProblem from "./submit-problem";
 
 const ProblemHeader = () => {
   return (
@@ -31,10 +31,7 @@ const ProblemHeader = () => {
           <span>Run</span>
         </Button>
 
-        <Button variant="secondary" className="gap-2 text-green-500 font-bold">
-          <CloudUpload className="size-5" />
-          <span>Submit</span>
-        </Button>
+        <SubmitProblem />
       </div>
 
       <div className="hidden sm:block">

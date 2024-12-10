@@ -24,7 +24,7 @@ export type ProblemView = {
 };
 
 export type Problem = {
-  id: string;
+  id: number;
   title: string;
   slug: string;
   difficulty: Difficulty;
