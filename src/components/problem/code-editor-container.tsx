@@ -1,7 +1,6 @@
 "use client";
-import { Code, RotateCcw } from "lucide-react";
+import { Code } from "lucide-react";
 
-import { Button } from "../ui/button";
 import dynamic from "next/dynamic";
 
 import ProblemLanguage from "./problem-language";
@@ -32,12 +31,15 @@ const CodeEditorContainer = ({ slug }: { slug: string }) => {
 
       <section className="flex justify-between px-2 py-1 border-b border-accent">
         <ProblemLanguage currLang={language} setCurrLang={setLanguage} />
-        <Button variant="ghost">
+        {/* <Button variant="ghost">
           <RotateCcw
             className="size-4 text-secondary-foreground"
             strokeWidth={2.5}
+            onClick={() => {
+              setResetFlag(!resetFlag);
+            }}
           />
-        </Button>
+        </Button> */}
       </section>
 
       <div className="h-full w-full ">

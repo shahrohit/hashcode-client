@@ -128,7 +128,7 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
       <Tabs defaultValue="description" className="h-full" value={activeTab}>
         <TabsList
           defaultValue="description"
-          className="flex gap-4 bg-secondary rounded-none py-5 justify-start *:min-w-[150px] overflow-scroll hide-scrollbar "
+          className="flex gap-4 bg-secondary rounded-none py-5 justify-start overflow-x-scroll overflow-y-hidden hide-scrollbar *:min-w-[150px] "
         >
           {tabs.map((tab) => {
             return (

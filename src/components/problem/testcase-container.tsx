@@ -11,7 +11,7 @@ const TestCaseContainer = ({ slug }: { slug: string }) => {
   return (
     <div className="h-full">
       <Tabs defaultValue="testcase" className="h-full">
-        <TabsList className="flex bg-secondary rounded-none py-5 justify-start *:min-w-[175px] overflow-x-scroll hide-scrollbar">
+        <TabsList className="flex bg-secondary rounded-none py-5 justify-start *:min-w-[175px] overflow-x-scroll overflow-y-hidden hide-scrollbar">
           <TabsTrigger value="testcase" className="flex items-center gap-2">
             <ListCheck className="size-6 bg-blue-600/20 text-blue-600 rounded-full p-1" />
             <span className="text-base font-bold">Testcase</span>

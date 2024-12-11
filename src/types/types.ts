@@ -61,4 +61,6 @@ export type TExecutionJob = {
   status: TExecutionStatus;
   acceptedCount?: number;
   timestamp: string;
+  testcaseCount: number;
+  language: string;
 };
