@@ -1,36 +1,40 @@
 "use client";
 import React from "react";
 import { Button } from "../ui/button";
-import { CloudUpload } from "lucide-react";
+import { HiPlay } from "react-icons/hi2";
+import { useRun } from "@/hooks/use-run";
+import useRunStore from "@/store/run-store";
 import useSubmissionStore from "@/store/submission-store";
-import { useSubmission } from "@/hooks/use-submission";
 
-const SubmitProblem = () => {
-  const { id, problemSlug, code, language } = useSubmissionStore();
-  const { mutate, isPending } = useSubmission();
+const RunProblem = () => {
+  const { problemSlug, code, language } = useSubmissionStore();
+  const { id, testcases } = useRunStore();
+  const { mutate, isPending } = useRun();
+
   const handleSubmit = () => {
     if (!problemSlug || !language || !code) {
       alert("Empty");
       return;
     }
     mutate({
-      id: id,
+      id,
       problem: problemSlug,
       language,
       code,
+      testcases,
     });
   };
   return (
     <Button
       variant="secondary"
-      className="gap-2 text-green-500 font-bold"
+      className="gap-2 font-bold"
       onClick={handleSubmit}
       disabled={isPending}
     >
-      <CloudUpload className="size-5" />
-      <span>Submit</span>
+      <HiPlay className="size-5" />
+      <span>Run</span>
     </Button>
   );
 };
 
-export default SubmitProblem;
+export default RunProblem;

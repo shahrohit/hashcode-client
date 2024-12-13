@@ -1,15 +1,20 @@
 "use client";
+import useRun from "@/store/run-store";
 import { Testcase } from "@/types/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // Custom hook to manage test cases
 const useTestcases = (initialTestcases: Testcase) => {
-  const [testcases, setTestcases] = useState(initialTestcases);
+  const { testcases, setTestcases } = useRun();
+  useEffect(() => {
+    setTestcases(initialTestcases);
+  }, []);
+  // const [testcases, setTestcases] = useState(initialTestcases);
   const [activeTab, setActiveTab] = useState(0);
 
   const hasMaxcase = testcases.length >= 10;
 
-  const parseTestcase = (testcase: string) => testcase.split("\\n");
+  const parseTestcase = (testcase: string) => testcase.split("\n");
 
   const updateTestcaseParam = (
     index: number,
@@ -19,14 +24,14 @@ const useTestcases = (initialTestcases: Testcase) => {
     const updatedTestcases = [...testcases];
     const params = parseTestcase(updatedTestcases[index]);
     params[paramIndex] = value;
-    updatedTestcases[index] = params.join("\\n");
+    updatedTestcases[index] = params.join("\n");
     setTestcases(updatedTestcases);
   };
 
   const addTestcase = () => {
     if (hasMaxcase) return;
     const currentParams = parseTestcase(testcases[activeTab]);
-    const newTestcase = currentParams.map((val) => val).join("\\n");
+    const newTestcase = currentParams.map((val) => val).join("\n");
     setTestcases([...testcases, newTestcase]);
     setActiveTab(testcases.length);
   };

@@ -9,7 +9,7 @@ export const useProblems = () => {
   return useQuery({
     staleTime: Infinity,
     queryKey: ["problems"],
-
+    retry: 0,
     queryFn: async () => {
       const response = await api.get(`/users/problems`);
       return response.data.data as ProblemView[];

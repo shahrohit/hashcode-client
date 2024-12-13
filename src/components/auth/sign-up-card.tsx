@@ -21,8 +21,11 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Link from "next/link";
 import registerSchema, { TRegister } from "@/schemas/register-schema";
+import { useRegister } from "@/hooks/user-register";
 
 const SignUpCard = () => {
+  const { mutate: registerUser, isPending } = useRegister();
+
   const form = useForm<TRegister>({
     defaultValues: {
       username: "",
@@ -38,7 +41,7 @@ const SignUpCard = () => {
   };
 
   const onSubmit = (values: TRegister) => {
-    console.log({ values });
+    registerUser(values);
   };
 
   return (
@@ -50,6 +53,23 @@ const SignUpCard = () => {
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              name="name"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      type="text"
+                      placeholder="Enter Full name"
+                      autoComplete="off"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               name="username"
               control={form.control}
@@ -112,7 +132,7 @@ const SignUpCard = () => {
                 </FormItem>
               )}
             />
-            <Button size="lg" className="w-full text-lg">
+            <Button size="lg" className="w-full text-lg" disabled={isPending}>
               Sign Up
             </Button>
           </form>

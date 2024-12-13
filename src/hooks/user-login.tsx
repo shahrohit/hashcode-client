@@ -4,7 +4,6 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useAuth } from "./use-auth";
-import { toast } from "sonner";
 
 export const useLogin = () => {
   const router = useRouter();
@@ -18,10 +17,8 @@ export const useLogin = () => {
 
       return response.data;
     },
-    onSuccess: (data) => {
-      toast("Logged In");
-      setUser(data || null);
-      router.push("/");
+    onSuccess: () => {
+      router.refresh();
     },
     onError: () => {
       setUser(null);

@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useMutation } from "@tanstack/react-query";
 import { useAuth } from "./use-auth";
 import { toast } from "sonner";
+import useRunStore from "@/store/run-store";
 
-export const useSubmission = () => {
+export const useRun = () => {
   const { api } = useAuth();
   const mutation = useMutation({
     mutationFn: async (data: {
@@ -10,17 +12,20 @@ export const useSubmission = () => {
       problem: string;
       language: string;
       code: string;
+      testcases: string[];
     }) => {
-      const response = await api.post(`/submissions/submit`, {
+      console.log("Testcase run ");
+      console.log(data);
+      const response = await api.post(`/submissions/run`, {
         ...data,
-        type: "submit",
+        type: "run",
         timestamp: new Date().toISOString(),
       });
 
       return response.data;
     },
     onSuccess: () => {
-      toast("Judging");
+      toast("Running");
     },
     onError: () => {
       toast.error("Error");
