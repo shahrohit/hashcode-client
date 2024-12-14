@@ -20,6 +20,8 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import Link from "next/link";
 import { useLogin } from "@/hooks/user-login";
+import { FcGoogle } from "react-icons/fc";
+import { FaGithub } from "react-icons/fa";
 
 const SignInCard = () => {
   const { mutate: loginUser, isPending } = useLogin();
@@ -39,6 +41,10 @@ const SignInCard = () => {
 
   const onSubmit = (values: TLogin) => {
     loginUser(values);
+  };
+
+  const handleGoogle = () => {
+    window.open("http://localhost:8080/auth/google", "_self");
   };
 
   return (
@@ -107,11 +113,12 @@ const SignInCard = () => {
         </Link>
       </CardContent> */}
 
-      {/* <CardContent className="flex flex-col gap-y-4">
+      <CardContent className="flex flex-col gap-y-4">
         <Button
           variant="secondary"
           size="lg"
           className="w-full bg-background text-foreground border py-2"
+          onClick={handleGoogle}
         >
           <FcGoogle className="mr-2 size-5" />
           Login with Google
@@ -124,7 +131,7 @@ const SignInCard = () => {
           <FaGithub className="mr-2 size-5" />
           Login with Github
         </Button>
-      </CardContent> */}
+      </CardContent>
 
       <CardContent className="">
         <p className="text-center">

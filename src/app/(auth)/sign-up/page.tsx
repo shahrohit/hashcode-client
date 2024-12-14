@@ -1,7 +1,7 @@
-import SignUpCard from "@/components/auth/sign-up-card";
+import SingUp from "@/components/auth/sign-up";
 
 const SignInPage = () => {
-  return <SignUpCard />;
+  return <SingUp />;
 };
 
 export default SignInPage;
