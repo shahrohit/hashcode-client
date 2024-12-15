@@ -12,10 +12,13 @@ function makeQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        // With SSR, we usually want to set some default staleTime
-        // above 0 to avoid refetching immediately on the client
         staleTime: Infinity,
-        retry: 1,
+        retry: (failureCount, error: any) => {
+          const status = error.status;
+          if (status === 404 || status === 401) return false;
+          return failureCount < 1;
+        },
+        refetchOnWindowFocus: false,
       },
     },
   });

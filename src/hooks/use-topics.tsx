@@ -6,8 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 export const useTopics = () => {
   const { api } = useAuth();
   return useQuery({
-    staleTime: Infinity,
-    retry: 0,
     queryKey: ["topics"],
 
     queryFn: async () => {

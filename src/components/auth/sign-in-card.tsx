@@ -21,7 +21,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useLogin } from "@/hooks/user-login";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
+import { handleGoogleAuth } from "@/utils/handle-oauth";
 
 const SignInCard = () => {
   const { mutate: loginUser, isPending } = useLogin();
@@ -41,10 +41,6 @@ const SignInCard = () => {
 
   const onSubmit = (values: TLogin) => {
     loginUser(values);
-  };
-
-  const handleGoogle = () => {
-    window.open("http://localhost:8080/auth/google", "_self");
   };
 
   return (
@@ -100,6 +96,7 @@ const SignInCard = () => {
                 </FormItem>
               )}
             />
+
             <Button size="lg" className="w-full text-lg" disabled={isPending}>
               Log In
             </Button>
@@ -107,6 +104,7 @@ const SignInCard = () => {
         </Form>
       </CardContent>
 
+      {/* TODO: Make Forget Password Feature */}
       {/* <CardContent>
         <Link href={"/forgot-password"}>
           <span className="text-primary">Forgot Password?</span>
@@ -118,18 +116,10 @@ const SignInCard = () => {
           variant="secondary"
           size="lg"
           className="w-full bg-background text-foreground border py-2"
-          onClick={handleGoogle}
+          onClick={handleGoogleAuth}
         >
           <FcGoogle className="mr-2 size-5" />
           Login with Google
-        </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          className="w-full bg-background text-foreground border py-2"
-        >
-          <FaGithub className="mr-2 size-5" />
-          Login with Github
         </Button>
       </CardContent>
 
@@ -138,7 +128,7 @@ const SignInCard = () => {
           Don&apos;t have an Account?{" "}
           <Link href={"/sign-up"}>
             <span className="text-primary">&nbsp;Create Account</span>
-          </Link>{" "}
+          </Link>
         </p>
       </CardContent>
     </Card>

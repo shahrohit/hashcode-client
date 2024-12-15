@@ -1,10 +1,10 @@
-import { BASE_URL } from "@/utils/constants";
 import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
 // import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { TRegister } from "@/schemas/register-schema";
 import { useRouter } from "next/navigation";
+import { BACKEND_URL } from "@/config/config";
 
 export const useRegister = () => {
   const router = useRouter();
@@ -12,7 +12,7 @@ export const useRegister = () => {
   const mutation = useMutation({
     mutationFn: async (credentails: TRegister) => {
       const response = await axios.post(
-        `${BASE_URL}/auth/send-otp`,
+        `${BACKEND_URL}/api/auth/send-otp`,
         credentails
       );
 
@@ -39,7 +39,7 @@ export const useVerify = () => {
 
   const mutation = useMutation({
     mutationFn: async (body: { email: string; otp: number }) => {
-      const response = await axios.post(`${BASE_URL}/auth/verify`, body);
+      const response = await axios.post(`${BACKEND_URL}/api/auth/verify`, body);
 
       return response.data;
     },

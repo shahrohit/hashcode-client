@@ -6,12 +6,15 @@ import ProblemTestcase from "./problem-testcase";
 import useRunStore from "@/store/run-store";
 import { useAuth } from "@/hooks/use-auth";
 import { useEffect, useState } from "react";
-import { SOCKET_URL } from "@/utils/constants";
 import { io, Socket } from "socket.io-client";
 import { v4 as uuidv4 } from "uuid";
 import TestcaseResultTab from "./TestcaseResultTab";
 import { useProblemTestcases } from "@/hooks/use-problem";
 import Loading from "../Loading";
+import { BACKEND_URL } from "@/config/config";
+import { useRun } from "@/hooks/use-run";
+import { REGISTER, RUN } from "@/utils/socket-events";
+import createSocket from "@/utils/socket-io";
 
 const TestCaseContainer = ({ slug }: { slug: string }) => {
   const { data, isPending } = useProblemTestcases(slug);
@@ -20,24 +23,21 @@ const TestCaseContainer = ({ slug }: { slug: string }) => {
   const [activeTab, setActiveTab] = useState("testcase");
   const { user } = useAuth();
   const { setId } = useRunStore();
-
   const [response, setResponse] = useState<object | null>(null);
+
+  const handleResponse = (runResponse: any) => {
+    setResponse(runResponse);
+    setActiveTab("result");
+  };
   useEffect(() => {
-    if (!user) return;
-    if (socket) return;
-    const newSocket = io(SOCKET_URL, {
-      path: "/socket.io", // Ensure the path matches your proxy setup
-      transports: ["websocket"],
-    });
+    if (!user || socket) return;
+    const newSocket = createSocket();
     const id = uuidv4();
     setId(id);
     setSocket(newSocket);
-    newSocket.emit("register", id);
+    newSocket.emit(REGISTER, id);
 
-    newSocket.on("run_response", (runResponse) => {
-      setResponse(runResponse);
-      setActiveTab("result");
-    });
+    newSocket.on(RUN, handleResponse);
 
     return () => {
       newSocket.disconnect();
@@ -75,7 +75,7 @@ const TestCaseContainer = ({ slug }: { slug: string }) => {
             {isPending ? (
               <Loading />
             ) : data ? (
-              <ProblemTestcase testcase={data} />
+              <ProblemTestcase testcase={data} slug={slug} />
             ) : (
               <div>No Testcase</div>
             )}

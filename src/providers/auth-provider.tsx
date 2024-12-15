@@ -9,9 +9,9 @@ import React, {
   ReactNode,
 } from "react";
 import axios, { AxiosInstance } from "axios";
-import { BASE_URL } from "@/utils/constants";
 import Loading from "@/components/Loading";
 import { AuthUser } from "@/types/response-type";
+import { BACKEND_URL } from "@/config/config";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -31,19 +31,18 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [isPending, setIsPending] = useState(true);
-  const hasFetchedUser = useRef(false); // To prevent multiple calls
+  const hasFetchedUser = useRef(false);
 
   const fetchUser = async (): Promise<AuthUser | null> => {
     try {
       const response = await axios.post(
-        `${BASE_URL}/auth/refresh`,
+        `${BACKEND_URL}/api/auth/refresh`,
         {},
         { withCredentials: true }
       );
       setUser(response.data.data as AuthUser);
       return response.data.data as AuthUser;
     } catch (error) {
-      console.error("Error fetching user:", error);
       setUser(null);
       return null;
     } finally {
@@ -59,7 +58,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const api = useMemo(() => {
-    const instance = axios.create({ baseURL: BASE_URL, withCredentials: true });
+    const instance = axios.create({
+      baseURL: `${BACKEND_URL}/api`,
+      withCredentials: true,
+    });
 
     instance.interceptors.request.use(
       (config) => {
@@ -90,7 +92,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return instance;
   }, [user]);
 
-  if (isPending) return <Loading />;
+  if (isPending)
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <Loading />
+      </main>
+    );
 
   return (
     <AuthContext.Provider value={{ user, setUser, api, fetchUser }}>

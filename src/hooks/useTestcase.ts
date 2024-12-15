@@ -1,14 +1,18 @@
 "use client";
-import useRun from "@/store/run-store";
+import useRunStore from "@/store/run-store";
 import { Testcase } from "@/types/types";
 import { useEffect, useState } from "react";
 
 // Custom hook to manage test cases
-const useTestcases = (initialTestcases: Testcase) => {
-  const { testcases, setTestcases } = useRun();
+const useTestcases = (currSlug: string, initialTestcases: Testcase) => {
+  const { slug, setSlug, testcases, setTestcases } = useRunStore();
   useEffect(() => {
-    setTestcases(initialTestcases);
+    if (!slug || currSlug !== slug) {
+      setTestcases(initialTestcases);
+      setSlug(currSlug);
+    }
   }, []);
+
   // const [testcases, setTestcases] = useState(initialTestcases);
   const [activeTab, setActiveTab] = useState(0);
 

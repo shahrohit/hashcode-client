@@ -1,46 +1,45 @@
-import { TLogin } from "@/schemas/login-schema";
-import { BASE_URL } from "@/utils/constants";
-import { useMutation } from "@tanstack/react-query";
 import axios, { AxiosError } from "axios";
-import { useAuth } from "./use-auth";
+import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
+
+import { BACKEND_URL } from "@/config/config";
+import { useAuth } from "@/hooks/use-auth";
+import { TLogin } from "@/schemas/login-schema";
+import getErrorMessage from "@/utils/get-error-msg";
 
 export const useLogin = () => {
   const { setUser } = useAuth();
   const mutation = useMutation({
     mutationFn: async (credentails: TLogin) => {
-      const response = await axios.post(`${BASE_URL}/auth/login`, credentails, {
-        withCredentials: true,
-      });
+      const response = await axios.post(
+        `${BACKEND_URL}/api/auth/login`,
+        credentails,
+        { withCredentials: true }
+      );
 
       return response.data;
     },
     onSuccess: () => {
-      toast("Logged in");
+      toast.success("Logged in");
       window.location.reload();
     },
     onError: (error: AxiosError) => {
-      const errData = error?.response?.data as { message: string };
-      if (!errData) {
-        toast.error("Someting Went Wrong");
-      } else {
-        toast.error(errData.message);
-      }
+      const message = getErrorMessage(error);
+      toast.error(message);
       setUser(null);
     },
   });
   return mutation;
 };
+
 export const useLogout = () => {
   const { setUser } = useAuth();
   const mutation = useMutation({
     mutationFn: async () => {
       await axios.post(
-        `${BASE_URL}/auth/logout`,
+        `${BACKEND_URL}/api/auth/logout`,
         {},
-        {
-          withCredentials: true,
-        }
+        { withCredentials: true }
       );
     },
     onSuccess: () => {
@@ -48,12 +47,7 @@ export const useLogout = () => {
       toast.success("Logged Out");
     },
     onError: (error: AxiosError) => {
-      const errData = error?.response?.data as { message: string };
-      if (!errData) {
-        toast.error("Someting Went Wrong");
-      } else {
-        toast.error(errData.message);
-      }
+      toast.error(getErrorMessage(error));
     },
   });
   return mutation;

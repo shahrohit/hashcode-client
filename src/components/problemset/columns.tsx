@@ -9,8 +9,12 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { Difficulty, ProblemView, Topic } from "@/types/response-type";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+const difficultyColor = {
+  Basic: "text-blue-500",
+  Easy: "text-green-600",
+  Medium: "text-medium",
+  Hard: "text-red-500",
+};
 
 export const columns: ColumnDef<ProblemView>[] = [
   {
@@ -44,7 +48,6 @@ export const columns: ColumnDef<ProblemView>[] = [
       const slug = row.original.slug;
       const id = row.original.id;
 
-      // let  = "text-easy";
       return (
         <Link
           href={`/problems/${slug}`}
@@ -60,18 +63,8 @@ export const columns: ColumnDef<ProblemView>[] = [
     header: () => <div>Difficulty</div>,
     cell: ({ row }) => {
       const status = row.getValue("difficulty") as Difficulty;
-      // let color = "text-easy";
       return (
-        <div
-          className={cn(
-            "font-semibold",
-            status === "Easy"
-              ? "text-green-500"
-              : status === "Medium"
-              ? "text-medium"
-              : "text-red-500"
-          )}
-        >
+        <div className={cn("font-semibold", difficultyColor[status])}>
           {status}
         </div>
       );
@@ -101,8 +94,3 @@ export const columns: ColumnDef<ProblemView>[] = [
     },
   },
 ];
-// {
-//   id: "actions",
-//   cell: ({ row }) => {
-//     const payment = row.original;
-// },

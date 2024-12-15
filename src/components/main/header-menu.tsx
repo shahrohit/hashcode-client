@@ -15,7 +15,7 @@ const HeaderMenu = () => {
       <ModeToggle />
 
       {user ? (
-        <UserButton username={user.username} />
+        <UserButton user={user} />
       ) : (
         <section className="hidden sm:flex items-center gap-2">
           <Button variant="secondary" size="lg" className="rounded-2xl text-lg">

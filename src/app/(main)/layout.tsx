@@ -24,7 +24,7 @@ export default function MainLayout({ children }: Props) {
           <NavBar />
           <HeaderMenu />
         </section>
-        <div className="flex items-center justify-center pt-0 px-1 xs:px-4 w-full">
+        <div className="flex items-center justify-center pt-0 px-1 xs:px-4 w-full h-full">
           {children}
         </div>
       </div>

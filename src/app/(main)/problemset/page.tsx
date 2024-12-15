@@ -7,6 +7,7 @@ const PracticeSetPage = () => {
         <section className="h-full w-full p-1">
           <ProblemSetContainer />
         </section>
+        {/* TODO: USER STATS */}
         {/* <section className="w-full lg:w-[30%] p-1">
           <UserStatContainer />
         </section> */}

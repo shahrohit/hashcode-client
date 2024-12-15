@@ -4,14 +4,13 @@ import useSubmissionStore from "@/store/submission-store";
 import { Problem, ProblemView, Testcase } from "@/types/response-type";
 import { useQuery } from "@tanstack/react-query";
 
-export const useProblems = () => {
+export const useProblems = (query: string) => {
   const { api } = useAuth();
   return useQuery({
     staleTime: Infinity,
-    queryKey: ["problems"],
-    retry: 0,
+    queryKey: ["problems", query],
     queryFn: async () => {
-      const response = await api.get(`/users/problems`);
+      const response = await api.get(`/users/problems/search?query=${query}`);
       return response.data.data as ProblemView[];
     },
   });

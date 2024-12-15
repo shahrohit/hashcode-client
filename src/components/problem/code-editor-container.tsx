@@ -31,6 +31,7 @@ const CodeEditorContainer = ({ slug }: { slug: string }) => {
 
       <section className="flex justify-between px-2 py-1 border-b border-accent">
         <ProblemLanguage currLang={language} setCurrLang={setLanguage} />
+        {/* TODO: RESET CODE */}
         {/* <Button variant="ghost">
           <RotateCcw
             className="size-4 text-secondary-foreground"

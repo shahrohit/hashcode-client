@@ -8,6 +8,13 @@ import Loading from "../Loading";
 import { useState } from "react";
 import { notFound } from "next/navigation";
 
+const difficultyColorWithBg = {
+  Basic: "text-blue-500 bg-blue-500/10",
+  Easy: "text-green-600 bg-green-600/10",
+  Medium: "text-medium text-medium/10",
+  Hard: "text-red-500 text-red-500/10",
+};
+
 const ProblemDescription = ({ slug }: { slug: string }) => {
   const { data: problem, isPending, isError } = useProblemDescription(slug);
   const [showTopic, setShowTopic] = useState(false);
@@ -27,10 +34,7 @@ const ProblemDescription = ({ slug }: { slug: string }) => {
           size="sm"
           className={cn(
             "rounded-full gap-2 text-sm  border-none h-7 cursor-default",
-            problem.difficulty === "Basic" && "bg-blue-600/20 text-blue-600",
-            problem.difficulty === "Easy" && "bg-green-600/20 text-green-600",
-            problem.difficulty == "Medium" && "bg-medium/20 text-medium",
-            problem.difficulty === "Hard" && "bg-hard-600/20 text-hard-600"
+            difficultyColorWithBg[problem.difficulty]
           )}
         >
           {problem.difficulty}

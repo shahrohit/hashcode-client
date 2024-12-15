@@ -6,11 +6,12 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { routes } from "@/utils/constants";
+import { useAuth } from "@/hooks/use-auth";
 
 const MobileNavbar = () => {
-  const user = { username: "shahrohit", email: "shahrohit2061@gmail.com" };
   const [showNav, setShowNav] = useState(false);
   const pathname = usePathname();
+  const { user } = useAuth();
 
   return (
     <div className="">
@@ -24,7 +25,7 @@ const MobileNavbar = () => {
       </Button>
 
       {showNav && (
-        <section className="fixed top-0 left-0 z-auto w-screen min-h-screen bg-background">
+        <section className="fixed top-0 left-0 z-30 w-screen min-h-screen bg-background">
           <div className="flex flex-col items-center  w-full h-full md:w-[80%] mx-auto py-10">
             <Button
               variant="none"
@@ -61,14 +62,7 @@ const MobileNavbar = () => {
                 })}
               </ul>
             </nav>
-            {user ? (
-              <div className="flex justify-center gap-2">
-                <div className="flex items-center gap-2 border p-1 pr-5 rounded-full">
-                  {/* <UserButton /> */}
-                  {user.username}
-                </div>
-              </div>
-            ) : (
+            {!user && (
               <section className="flex items-center gap-3 py-5">
                 <Button variant="secondary" size="lg" className="text">
                   <Link href="/sign-up">Register</Link>

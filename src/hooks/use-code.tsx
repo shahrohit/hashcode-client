@@ -6,7 +6,7 @@ export const useCodes = (slug: string) => {
   const { api } = useAuth();
   return useQuery({
     staleTime: Infinity,
-    queryKey: ["codes"],
+    queryKey: ["codes", slug],
 
     queryFn: async () => {
       const response = await api.get(`/users/problems/${slug}/codes`);

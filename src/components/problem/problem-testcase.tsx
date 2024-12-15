@@ -8,7 +8,13 @@ import { toast } from "sonner";
 import useTestcases from "@/hooks/useTestcase";
 import { Testcase } from "@/types/response-type";
 
-const ProblemTestcase = ({ testcase }: { testcase: Testcase }) => {
+const ProblemTestcase = ({
+  testcase,
+  slug,
+}: {
+  testcase: Testcase;
+  slug: string;
+}) => {
   const {
     testcases,
     activeTab,
@@ -19,7 +25,7 @@ const ProblemTestcase = ({ testcase }: { testcase: Testcase }) => {
     deleteTestcase,
     hasMaxcase,
     resetTestcase,
-  } = useTestcases(testcase.sampleTestcases);
+  } = useTestcases(slug, testcase.sampleTestcases);
 
   const paramsName = testcase.parameterName.split("\\n");
 

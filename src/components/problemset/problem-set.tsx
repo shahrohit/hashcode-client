@@ -1,14 +1,25 @@
 "use client";
 import { columns } from "./columns";
 import { DataTable } from "./data-table";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Input } from "../ui/input";
 import { useProblems } from "@/hooks/use-problem";
+import debounce from "lodash.debounce";
 
 const ProblemSet = () => {
-  const { data: problems, isPending } = useProblems();
   const [searchText, setSearchText] = useState("");
+  const [query, setQuery] = useState("");
+  const { data: problems, isPending } = useProblems(query);
 
+  const debouncedSearch = useMemo(
+    () => debounce((value) => setQuery(value), 500),
+    []
+  );
+
+  const handleInputChange = (value: string) => {
+    setSearchText(value);
+    debouncedSearch(value);
+  };
   return (
     <div className="mt-7">
       <div className="flex flex-col sm:flex-row items-end sm:items-center justify-end gap-2 py-4">
@@ -17,7 +28,7 @@ const ProblemSet = () => {
         <Input
           placeholder="Search Problem..."
           value={searchText}
-          onChange={(event) => setSearchText(event.target.value)}
+          onChange={(event) => handleInputChange(event.target.value)}
           className="max-w-sm"
         />
       </div>

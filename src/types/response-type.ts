@@ -1,5 +1,8 @@
 export type AuthUser = {
+  name: string;
+  email: string;
   username: string;
+  avatar: string | null;
   accessToken: string;
 };
 

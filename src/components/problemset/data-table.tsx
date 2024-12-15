@@ -21,7 +21,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Button } from "../ui/button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loading from "../Loading";
 
 interface DataTableProps<TData, TValue> {
@@ -34,7 +34,6 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  searchText,
   isPending,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -54,10 +53,6 @@ export function DataTable<TData, TValue>({
       columnFilters,
     },
   });
-
-  useEffect(() => {
-    table.getColumn("title")?.setFilterValue(searchText);
-  }, [table, searchText]);
 
   return (
     <div>

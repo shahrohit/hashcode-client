@@ -12,7 +12,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Eye, EyeOff } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
-import { FaGithub } from "react-icons/fa";
 
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
@@ -147,14 +146,6 @@ const SignUpCard = () => {
         >
           <FcGoogle className="mr-2 size-5" />
           Signup with Google
-        </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          className="w-full bg-background text-foreground border py-2"
-        >
-          <FaGithub className="mr-2 size-5" />
-          Signup with Github
         </Button>
       </CardContent>
 

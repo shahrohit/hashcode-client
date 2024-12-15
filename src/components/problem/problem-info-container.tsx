@@ -1,56 +1,47 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import {
-  BookOpen,
   CheckCheck,
-  CircleX,
+  CircleAlert,
+  CircleMinus,
   FileText,
   Send,
-  Trash,
   X,
 } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import ProblemDescription from "./problem-description";
 import SubmissionTab from "./submission-tab";
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import React, { MouseEvent, useEffect, useRef, useState } from "react";
 import { useAuth } from "@/hooks/use-auth";
-import { SOCKET_URL } from "@/utils/constants";
-import { io, Socket } from "socket.io-client";
+
+import { Socket } from "socket.io-client";
 import useSubmissionStore from "@/store/submission-store";
 import ResponseTab from "./ResponseTab";
-import { Button } from "../ui/button";
 import { v4 as uuidv4 } from "uuid";
+import createSocket from "@/utils/socket-io";
+import { REGISTER, SUBMIT } from "@/utils/socket-events";
+
+const iconClass = {
+  blue: "size-6 rounded-full p-1 bg-blue-600/20 text-blue-600",
+  yellow: "size-6 rounded-full p-1 bg-yellow-600/20 text-yellow-600",
+  green: "size-6 rounded-full p-1 bg-green-600/20 text-green-600",
+  red: "size-6 rounded-full p-1 bg-red-600/20 text-red-600",
+};
+
+type Tab = {
+  value: string;
+  title: string;
+  content: any;
+};
+
+const getIcon = (tab: string) => {
+  if (tab === "Accepted") return <CheckCheck className={iconClass.green} />;
+  else if (tab === "Result")
+    return <CircleMinus className={iconClass.yellow} />;
+  return <CircleAlert className={iconClass.red} />;
+};
 
 const ProblemInfoContainer = ({ slug }: { slug: string }) => {
-  const [tabs, setTabs] = useState([
-    {
-      value: "description",
-      title: "Description",
-      content: <ProblemDescription slug={slug} />,
-      persist: true,
-      icon: (
-        <FileText className="size-6 bg-blue-600/20 text-blue-600 rounded-full p-1" />
-      ),
-    },
-    {
-      value: "editorial",
-      title: "Editorial",
-      content: <div>Editorial Content</div>,
-      persist: true,
-      icon: (
-        <BookOpen className="size-6 bg-yellow-600/20 text-yellow-600 rounded-full p-1" />
-      ),
-    },
-    {
-      value: "submission",
-      title: "Submission",
-      content: <SubmissionTab />,
-      persist: true,
-      icon: (
-        <Send className="size-6 bg-green-600/20 text-green-600 rounded-full p-1" />
-      ),
-    },
-  ]);
+  const [tabs, setTabs] = useState<Tab[]>([]);
   const [socket, setSocket] = useState<Socket | null>(null);
   const [activeTab, setActiveTab] = useState("description");
   const { user } = useAuth();
@@ -58,45 +49,19 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
 
   const { setId } = useSubmissionStore();
 
-  useEffect(() => {
-    if (!user) return;
-    if (socket) return;
-    const newSocket = io(SOCKET_URL, {
-      path: "/socket.io", // Ensure the path matches your proxy setup
-      transports: ["websocket"],
-    });
-    const id = uuidv4();
-    setId(id);
-    setSocket(newSocket);
-    newSocket.emit("register", id);
+  const handleResponse = (response: any) => {
+    const value = `response-${Date.now()}`;
 
-    newSocket.on("response", (response) => {
-      // Add a new tab when a response is received
-      const value = `response-${Date.now()}`;
-      const icon =
-        response.status === "Accepted" ? (
-          <CheckCheck className="size-6 bg-green-600/20 text-green-600 rounded-full p-1" />
-        ) : (
-          <CircleX className="size-6 bg-red-600/20 text-red-600 rounded-full p-1" />
-        );
-
-      setTabs((prevTabs) => [
-        ...prevTabs,
-        {
-          value, // Unique identifier for the tab
-          title: `${response.status ?? "Result"}`,
-          content: <ResponseTab data={response} />, // The content received from the socket
-          persist: false,
-          icon: icon,
-        },
-      ]);
-      setActiveTab(value);
-    });
-
-    return () => {
-      newSocket.disconnect();
-    };
-  }, [user]);
+    setTabs((prevTabs) => [
+      ...prevTabs,
+      {
+        value,
+        title: `${response.status ?? "Result"}`,
+        content: response,
+      },
+    ]);
+    setActiveTab(value);
+  };
 
   const handleCloseTab = (
     e: MouseEvent<SVGSVGElement, globalThis.MouseEvent>,
@@ -114,6 +79,22 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
   };
 
   useEffect(() => {
+    if (!user || socket) return;
+
+    const newSocket = createSocket();
+    const id = uuidv4();
+    setId(id);
+    setSocket(newSocket);
+
+    newSocket.emit(REGISTER, id);
+    newSocket.on(SUBMIT, handleResponse);
+
+    return () => {
+      newSocket.disconnect();
+    };
+  }, [user]);
+
+  useEffect(() => {
     const tabRef = tabsRefs.current[activeTab];
     if (tabRef) {
       tabRef.scrollIntoView({
@@ -123,6 +104,7 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
       });
     }
   }, [activeTab]);
+
   return (
     <div className="h-full">
       <Tabs defaultValue="description" className="h-full" value={activeTab}>
@@ -130,7 +112,34 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
           defaultValue="description"
           className="flex gap-4 bg-secondary rounded-none py-5 justify-start overflow-x-scroll overflow-y-hidden hide-scrollbar *:min-w-[150px] "
         >
+          <TabsTrigger
+            value="description"
+            className="flex items-center gap-2 relative"
+            onClick={() => setActiveTab("description")}
+            ref={(el) => {
+              tabsRefs.current["description"] = el;
+            }}
+          >
+            <FileText className={iconClass.blue} />
+
+            <span className="text-base font-bold">Description</span>
+          </TabsTrigger>
+
+          <TabsTrigger
+            value="submission"
+            className="flex items-center gap-2 relative"
+            onClick={() => setActiveTab("submission")}
+            ref={(el) => {
+              tabsRefs.current["submission"] = el;
+            }}
+          >
+            <Send className={iconClass.green} />
+
+            <span className="text-base font-bold">Submission</span>
+          </TabsTrigger>
+
           {tabs.map((tab) => {
+            const icon = getIcon(tab.title);
             return (
               <TabsTrigger
                 key={tab.value}
@@ -141,15 +150,12 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
                   tabsRefs.current[tab.value] = el;
                 }}
               >
-                <span>{tab.icon}</span>
-
+                {icon}
                 <span className="text-base font-bold">{tab.title}</span>
-                {!tab.persist && (
-                  <X
-                    className="h-4 w-4 hover:text-red-500 absolute top-0 -right-2  rounded-full"
-                    onClick={(e) => handleCloseTab(e, tab.value)}
-                  />
-                )}
+                <X
+                  className="h-4 w-4 hover:text-red-500 absolute top-0 -right-2  rounded-full"
+                  onClick={(e) => handleCloseTab(e, tab.value)}
+                />
               </TabsTrigger>
             );
           })}
@@ -161,9 +167,16 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
             height: "calc(100% - 43px)",
           }}
         >
+          <TabsContent value="description">
+            <ProblemDescription slug={slug} />
+          </TabsContent>
+          <TabsContent value="submission">
+            <SubmissionTab />
+          </TabsContent>
+
           {tabs.map((tab) => (
             <TabsContent key={tab.value} value={tab.value}>
-              {tab.content}
+              <ResponseTab data={tab.content} />
             </TabsContent>
           ))}
         </div>

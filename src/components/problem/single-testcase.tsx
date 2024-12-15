@@ -24,7 +24,6 @@ const SingleTestcase = ({ titles, testcase }: Props) => {
     defaultValues[title] = val;
   });
 
-  console.log(defaultValues);
   const form = useForm({
     defaultValues: defaultValues,
   });
