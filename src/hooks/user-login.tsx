@@ -24,8 +24,7 @@ export const useLogin = () => {
       window.location.reload();
     },
     onError: (error: AxiosError) => {
-      const message = getErrorMessage(error);
-      toast.error(message);
+      toast.error(getErrorMessage(error));
       setUser(null);
     },
   });

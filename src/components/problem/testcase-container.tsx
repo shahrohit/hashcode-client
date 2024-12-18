@@ -22,7 +22,7 @@ const TestCaseContainer = ({ slug }: { slug: string }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [activeTab, setActiveTab] = useState("testcase");
   const { user } = useAuth();
-  const { setId } = useRunStore();
+  const { setSocketKey } = useRunStore();
   const [response, setResponse] = useState<object | null>(null);
 
   const handleResponse = (runResponse: any) => {
@@ -33,7 +33,7 @@ const TestCaseContainer = ({ slug }: { slug: string }) => {
     if (!user || socket) return;
     const newSocket = createSocket();
     const id = uuidv4();
-    setId(id);
+    setSocketKey(id);
     setSocket(newSocket);
     newSocket.emit(REGISTER, id);
 

@@ -1,20 +1,20 @@
 import { create } from "zustand";
 
 interface RunState {
-  id: string | null;
+  socketKey: string | null;
   slug: string | null;
-  setId: (slug: string) => void;
-  setSlug: (slug: string) => void;
   testcases: string[];
+  setSocketKey: (id: string) => void;
+  setSlug: (slug: string) => void;
   setTestcases: (testcase: string[]) => void;
 }
 
 const useRunStore = create<RunState>((set) => ({
-  id: null,
+  socketKey: null,
   slug: null,
-  setId: (id) => set({ id: id }),
-  setSlug: (slug) => set({ slug: slug }),
   testcases: [],
+  setSocketKey: (socketKey) => set({ socketKey: socketKey }),
+  setSlug: (slug) => set({ slug: slug }),
   setTestcases: (testcase: string[]) => set({ testcases: testcase }),
 }));
 

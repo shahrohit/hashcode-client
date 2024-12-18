@@ -43,7 +43,7 @@ const SubmitResult = ({ data }: Props) => {
           Testcases passed : {data.acceptedCount} / {data.testcaseCount}
         </span>
       </div>
-      {(status === "Wrong Answer" || status === "TLE") && (
+      {(status === "WrongAnswer" || status === "TLE") && (
         <>
           <div className="my-2">
             <span className="text-lg font-semibold">Input</span>
@@ -78,7 +78,7 @@ const SubmitResult = ({ data }: Props) => {
         </>
       )}
 
-      {status === "Compiled Error" && (
+      {status === "CompiledError" && (
         <>
           <div className="flex flex-col bg-red-500/10 text-red-500 rounded-md w-full p-2">
             <pre className="text-wrap">{data.executionOutput}</pre>

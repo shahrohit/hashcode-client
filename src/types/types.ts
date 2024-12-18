@@ -46,8 +46,8 @@ export type Activity = {
 
 export type TExecutionStatus =
   | "Accepted"
-  | "Compiled Error"
-  | "Wrong Answer"
+  | "CompiledError"
+  | "WrongAnswer"
   | "Error"
   | "TLE"
   | "RTE";
@@ -63,4 +63,19 @@ export type TExecutionJob = {
   timestamp: string;
   testcaseCount: number;
   language: string;
+};
+
+export type TUserSubmission = {
+  timestamp: string;
+  status: TExecutionStatus;
+  id: number;
+  userId: number;
+  problemId: number;
+  langId: number;
+  language: string;
+  input: string | null;
+  output: string | null;
+  executionOutput: string;
+  acceptedCount: number;
+  testcaseCount: number;
 };

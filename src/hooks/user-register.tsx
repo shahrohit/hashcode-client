@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { TRegister } from "@/schemas/register-schema";
 import { useRouter } from "next/navigation";
 import { BACKEND_URL } from "@/config/config";
+import getErrorMessage from "@/utils/get-error-msg";
 
 export const useRegister = () => {
   const router = useRouter();
@@ -23,12 +24,7 @@ export const useRegister = () => {
       router.push(`/verify?email=${response.data.email}`);
     },
     onError: (error: AxiosError) => {
-      const errData = error?.response?.data as { message: string };
-      if (!errData) {
-        toast.error("Someting Went Wrong");
-      } else {
-        toast.error(errData.message);
-      }
+      toast.error(getErrorMessage(error));
     },
   });
   return mutation;
@@ -48,11 +44,9 @@ export const useVerify = () => {
       router.push(`/sign-in`);
     },
     onError: (error: AxiosError) => {
-      const errData = error?.response?.data as { message: string };
-      if (!errData) {
-        toast.error("Someting Went Wrong");
-      } else {
-        toast.error(errData.message);
+      toast.error(getErrorMessage(error));
+      if (error.status == 403) {
+        router.push("/sign-up");
       }
     },
   });

@@ -1,10 +1,12 @@
 import { create } from "zustand";
 
 interface SubmissionState {
-  id: string | null;
-  setId: (id: string) => void;
+  socketKey: string | null;
+  setSocketKey: (id: string) => void;
   problemSlug: string | null;
+  problemId: number | null;
   setProblemSlug: (slug: string) => void;
+  setProblemId: (id: number) => void;
   language: string | null;
   setLanguage: (lang: string) => void;
   code: string | null;
@@ -13,9 +15,11 @@ interface SubmissionState {
 
 const useSubmissionStore = create<SubmissionState>((set) => ({
   problemSlug: null,
-  id: null,
+  problemId: null,
+  socketKey: null,
   setProblemSlug: (slug) => set({ problemSlug: slug }),
-  setId: (id) => set({ id: id }),
+  setProblemId: (id) => set({ problemId: id }),
+  setSocketKey: (socketKey) => set({ socketKey: socketKey }),
   language: null,
   setLanguage: (lang) => set({ language: lang }),
   code: null,

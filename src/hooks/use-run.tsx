@@ -3,10 +3,10 @@ import { useAuth } from "./use-auth";
 import { toast } from "sonner";
 
 export const useRun = () => {
-  const { api } = useAuth();
+  const { user, api } = useAuth();
   const mutation = useMutation({
     mutationFn: async (data: {
-      id: string | null;
+      socketKey: string | null;
       problem: string;
       language: string;
       code: string;
@@ -15,6 +15,7 @@ export const useRun = () => {
       const response = await api.post(`/submissions/run`, {
         ...data,
         type: "run",
+        username: user?.username,
         timestamp: new Date().toISOString(),
       });
 

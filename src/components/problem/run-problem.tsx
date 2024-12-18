@@ -9,7 +9,7 @@ import { useAuth } from "@/hooks/use-auth";
 
 const RunProblem = () => {
   const { problemSlug, code, language } = useSubmissionStore();
-  const { id, testcases } = useRunStore();
+  const { socketKey, testcases } = useRunStore();
   const { mutate, isPending } = useRun();
   const { user } = useAuth();
 
@@ -19,7 +19,7 @@ const RunProblem = () => {
       return;
     }
     mutate({
-      id,
+      socketKey,
       problem: problemSlug,
       language,
       code,

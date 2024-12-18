@@ -8,10 +8,11 @@ import React, {
   useRef,
   ReactNode,
 } from "react";
-import axios, { AxiosInstance } from "axios";
+import axios, { AxiosError, AxiosInstance } from "axios";
 import Loading from "@/components/Loading";
 import { AuthUser } from "@/types/response-type";
 import { BACKEND_URL } from "@/config/config";
+import { toast } from "sonner";
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -42,7 +43,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       );
       setUser(response.data.data as AuthUser);
       return response.data.data as AuthUser;
-    } catch (error) {
+    } catch (error: any) {
+      const err = error as AxiosError;
+      if (err?.status === 429) {
+        toast.error("Too many Request Please Try again later");
+      }
       setUser(null);
       return null;
     } finally {

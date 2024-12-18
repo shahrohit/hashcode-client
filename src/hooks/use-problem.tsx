@@ -17,7 +17,7 @@ export const useProblems = (query: string) => {
 };
 export const useProblemDescription = (slug: string) => {
   const { api } = useAuth();
-  const { setProblemSlug } = useSubmissionStore();
+  const { setProblemId, setProblemSlug } = useSubmissionStore();
   return useQuery({
     staleTime: Infinity,
     queryKey: ["description", slug],
@@ -27,6 +27,7 @@ export const useProblemDescription = (slug: string) => {
       const data = response.data.data as Problem;
       if (response.status === 200 && data?.slug) {
         setProblemSlug(data.slug);
+        setProblemId(data.id);
       }
       return data;
     },

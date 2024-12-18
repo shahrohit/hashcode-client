@@ -7,7 +7,7 @@ import { useSubmission } from "@/hooks/use-submission";
 import { useAuth } from "@/hooks/use-auth";
 
 const SubmitProblem = () => {
-  const { id, problemSlug, code, language } = useSubmissionStore();
+  const { socketKey, problemSlug, code, language } = useSubmissionStore();
   const { mutate, isPending } = useSubmission();
   const { user } = useAuth();
 
@@ -17,7 +17,7 @@ const SubmitProblem = () => {
       return;
     }
     mutate({
-      id: id,
+      socketKey: socketKey,
       problem: problemSlug,
       language,
       code,

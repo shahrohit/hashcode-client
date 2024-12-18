@@ -19,6 +19,7 @@ import ResponseTab from "./ResponseTab";
 import { v4 as uuidv4 } from "uuid";
 import createSocket from "@/utils/socket-io";
 import { REGISTER, SUBMIT } from "@/utils/socket-events";
+import { useQueryClient } from "@tanstack/react-query";
 
 const iconClass = {
   blue: "size-6 rounded-full p-1 bg-blue-600/20 text-blue-600",
@@ -46,8 +47,9 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
   const [activeTab, setActiveTab] = useState("description");
   const { user } = useAuth();
   const tabsRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const queryClient = useQueryClient();
 
-  const { setId } = useSubmissionStore();
+  const { setSocketKey } = useSubmissionStore();
 
   const handleResponse = (response: any) => {
     const value = `response-${Date.now()}`;
@@ -60,6 +62,9 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
         content: response,
       },
     ]);
+    queryClient.invalidateQueries({
+      queryKey: ["submissions"],
+    });
     setActiveTab(value);
   };
 
@@ -82,11 +87,11 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
     if (!user || socket) return;
 
     const newSocket = createSocket();
-    const id = uuidv4();
-    setId(id);
+    const key = uuidv4();
+    setSocketKey(key);
     setSocket(newSocket);
 
-    newSocket.emit(REGISTER, id);
+    newSocket.emit(REGISTER, key);
     newSocket.on(SUBMIT, handleResponse);
 
     return () => {
@@ -162,7 +167,7 @@ const ProblemInfoContainer = ({ slug }: { slug: string }) => {
         </TabsList>
 
         <div
-          className="min-w-[200px] overflow-y-auto"
+          className="min-w-[300px] overflow-y-auto"
           style={{
             height: "calc(100% - 43px)",
           }}
