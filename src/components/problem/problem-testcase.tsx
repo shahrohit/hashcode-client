@@ -27,7 +27,7 @@ const ProblemTestcase = ({
     resetTestcase,
   } = useTestcases(slug, testcase.sampleTestcases);
 
-  const paramsName = testcase.parameterName.split("\\n");
+  const paramsName = testcase.parameterName.split("\n");
 
   const handleDelete = (
     e: React.MouseEvent<SVGSVGElement, MouseEvent>,

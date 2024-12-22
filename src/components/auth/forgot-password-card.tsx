@@ -32,7 +32,9 @@ const ForgotPasswordCard = () => {
     },
     resolver: zodResolver(forgotPasswordSchema),
   });
-  const onSubmit = (values: TForgotPassword) => {};
+  const onSubmit = (values: TForgotPassword) => {
+    console.log(values);
+  };
 
   return (
     <Card className="w-full h-full md:w-[487px] border-2 shadow-none">
