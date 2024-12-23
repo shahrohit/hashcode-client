@@ -25,7 +25,7 @@ const CodeEditor = ({
   const setCustomTheme = useCallback(
     (monaco: Monaco) => {
       monaco.editor.defineTheme("custom-theme", {
-        base: theme === "dark" ? "vs-dark" : "vs",
+        base: theme === "light" ? "vs" : "vs-dark",
         inherit: true,
         rules: [
           { token: "comment", foreground: "7f848e", fontStyle: "italic" },
@@ -33,8 +33,8 @@ const CodeEditor = ({
           { token: "number", foreground: "d19a66" },
         ],
         colors: {
-          "editor.background": theme === "dark" ? "#09090b" : "#ededed",
-          "editor.foreground": theme === "dark" ? "#d9d9d9" : "#09090b",
+          "editor.background": theme === "light" ? "#ededed" : "#09090b",
+          "editor.foreground": theme === "light" ? "#09090b" : "#d9d9d9",
         },
       });
       monaco.editor.setTheme("custom-theme");
