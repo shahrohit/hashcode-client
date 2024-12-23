@@ -21,6 +21,7 @@ import { useState } from "react";
 import Link from "next/link";
 import registerSchema, { TRegister } from "@/schemas/register-schema";
 import { useRegister } from "@/hooks/user-register";
+import { handleGoogleAuth } from "@/utils/handle-oauth";
 
 const SignUpCard = () => {
   const { mutate: registerUser, isPending } = useRegister();
@@ -143,6 +144,7 @@ const SignUpCard = () => {
           variant="secondary"
           size="lg"
           className="w-full bg-background text-foreground border py-2"
+          onClick={handleGoogleAuth}
         >
           <FcGoogle className="mr-2 size-5" />
           Signup with Google
