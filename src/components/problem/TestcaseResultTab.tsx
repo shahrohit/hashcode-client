@@ -1,9 +1,10 @@
 "use client";
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { cn } from "@/lib/utils";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Dot } from "lucide-react";
+import Loading from "../Loading";
 
 const formateTime = (isoTime: string) => {
   const date = new Date(isoTime);
@@ -18,7 +19,21 @@ const formateTime = (isoTime: string) => {
 };
 
 const TestcaseResultTab = ({ result }: { result: any }) => {
-  if (!result) return <div>Please the testcase</div>;
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    const fetch = async () => {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      setLoading(false);
+    };
+
+    if (result) {
+      fetch();
+    }
+  }, [result]);
+  if (!result) return <div>Please run the testcase</div>;
+  if (loading) return <Loading />;
+
   const status = result.status;
   return (
     <div className="px-3">
@@ -102,14 +117,14 @@ const Component = ({ result }: { result: any }) => {
 
         <div className="my-2">
           <span className="text-lg font-semibold">Output</span>
-          <div className="h-12 flex items-center bg-secondary rounded-md w-full p-2">
+          <div className="min-h-12 flex items-center bg-secondary rounded-md w-full p-2">
             <span>{result.data[activeTab].executionOutput}</span>
           </div>
         </div>
 
         <div className="my-2">
           <span className="text-lg font-semibold">Expected Output</span>
-          <div className="h-12 flex items-center bg-secondary rounded-md w-full p-2">
+          <div className="min-h-12 flex items-center bg-secondary rounded-md w-full p-2">
             <span>{result.data[activeTab].output}</span>
           </div>
         </div>

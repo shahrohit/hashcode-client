@@ -11,8 +11,8 @@ import { notFound } from "next/navigation";
 const difficultyColorWithBg = {
   Basic: "text-blue-500 bg-blue-500/10",
   Easy: "text-green-600 bg-green-600/10",
-  Medium: "text-medium text-medium/10",
-  Hard: "text-red-500 text-red-500/10",
+  Medium: "text-medium bg-medium/10",
+  Hard: "text-red-500 bg-red-500/10",
 };
 
 const ProblemDescription = ({ slug }: { slug: string }) => {
